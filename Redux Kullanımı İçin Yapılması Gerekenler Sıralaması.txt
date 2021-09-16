@@ -1,0 +1,8 @@
+1-Create Action
+2-Create Reducer
+3-Create Root Reducer
+4-Configure Store 
+5-Instantiate Store 
+6-Connect Component 
+7-Pass props via connect 
+8-Dispatch action
