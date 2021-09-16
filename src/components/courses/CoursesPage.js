@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import * as actionsCourse from "../../redux/actions/actionsCourse";
 import propTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
+import { bindActionCreators } from "redux";
 
 function CoursesPage(props) {
   const [courses, setCourses] = useState(null);
@@ -14,12 +15,20 @@ function CoursesPage(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(props.courses);
-    props.dispatch(actionsCourse.createCourse(courses));
+    props.actions.createCourse(courses);
   };
 
+  const handleDelete = (event) => {
+    event.preventDefault();
+    props.actions.deleteCourse(courses.id);
+    console.log(props.courses);
+  };
+
+  /*
   useEffect(() => {
     console.log(props.courses);
   });
+  */
 
   return (
     <div>
@@ -31,6 +40,9 @@ function CoursesPage(props) {
         {props.courses.map((m) => (
           <div key={m.id}>
             <h5>{m.title}</h5>
+            <button className="btn btn-primary" onClick={handleDelete}>
+              Delete Course
+            </button>
           </div>
         ))}
       </form>
@@ -39,7 +51,7 @@ function CoursesPage(props) {
 }
 
 CoursesPage.propTypes = {
-  dispatch: propTypes.func.isRequired,
+  actions: propTypes.func.isRequired,
   courses: propTypes.array.isRequired,
 };
 
@@ -49,4 +61,10 @@ function mapStateTopProps(state) {
   };
 }
 
-export default connect(mapStateTopProps)(CoursesPage);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actionsCourse, dispatch),
+  };
+}
+
+export default connect(mapStateTopProps, mapDispatchToProps)(CoursesPage);
